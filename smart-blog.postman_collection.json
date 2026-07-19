@@ -1,0 +1,451 @@
+{
+  "info": {
+    "name": "smart-blog API",
+    "_postman_id": "6b8ea2e9-1f75-4f5b-89f6-0123456789ab",
+    "description": "Postman collection for the smart-blog Django backend endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "slug",
+      "value": "hello-world",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"new@example.com\",\n  \"password\": \"strongpassword123\",\n  \"password_confirm\": \"strongpassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register", ""]
+            }
+          }
+        },
+        {
+          "name": "Obtain JWT Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"strongpassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/token/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "token", ""]
+            }
+          }
+        },
+        {
+          "name": "Refresh JWT Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/token/refresh/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "token", "refresh", ""]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refresh\": \"{{refresh_token}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Current User Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Ada\",\n  \"profile\": {\n    \"bio\": \"Writer and engineer\",\n    \"location\": \"London\",\n    \"role\": \"author\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Blog",
+      "item": [
+        {
+          "name": "List Posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/posts/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "posts", ""]
+            }
+          }
+        },
+        {
+          "name": "Get Post by Slug",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/posts/{{slug}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "posts", "{{slug}}", ""]
+            }
+          }
+        },
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", ""]
+            }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Technology\",\n  \"slug\": \"technology\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", ""]
+            }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tech\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/technology/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "technology", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/technology/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "technology", ""]
+            }
+          }
+        },
+        {
+          "name": "List Tags",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/tags/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "tags", ""]
+            }
+          }
+        },
+        {
+          "name": "My Posts Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/my-posts/dashboard/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "my-posts", "dashboard", ""]
+            }
+          }
+        },
+        {
+          "name": "List My Posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/my-posts/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "my-posts", ""]
+            }
+          }
+        },
+        {
+          "name": "Create My Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My New Post\",\n  \"slug\": \"my-new-post\",\n  \"content\": \"Hello from the author dashboard\",\n  \"status\": \"draft\",\n  \"category\": \"technology\",\n  \"tags\": [\"django\", \"api\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/my-posts/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "my-posts", ""]
+            }
+          }
+        },
+        {
+          "name": "Update My Post",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Post\",\n  \"status\": \"published\",\n  \"tags\": [\"django\", \"backend\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/my-posts/{{slug}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "my-posts", "{{slug}}", ""]
+            }
+          }
+        },
+        {
+          "name": "Delete My Post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/my-posts/{{slug}}/",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "my-posts", "{{slug}}", ""]
+            }
+          }
+        },
+        {
+          "name": "RSS Feed",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/rss/",
+              "host": ["{{baseUrl}}"],
+              "path": ["rss", ""]
+            }
+          }
+        },
+        {
+          "name": "Sitemap",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/sitemap.xml",
+              "host": ["{{baseUrl}}"],
+              "path": ["sitemap.xml"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

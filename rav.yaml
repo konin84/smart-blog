@@ -1,0 +1,36 @@
+# rav.yaml — task runner config for the Django backend
+# Run tasks with: rav <task-name>
+
+name: rav
+version: 0.1.0
+author: Aka Konin
+license: MIT
+dependencies:
+  - python >=3.8
+scripts:
+  server:
+    - python manage.py runserver 2027
+  migrate:
+    - python manage.py migrate
+  makemigrations:
+    - python manage.py makemigrations
+  shell_plus:
+    - python manage.py shell
+  createsuperuser:
+    - python manage.py createsuperuser
+  collectstatic:
+    - python manage.py collectstatic --noinput
+  test:
+    - python manage.py test
+  shell:
+    - python manage.py shell
+  lint:
+    - flake8 .
+  format:
+    - black .
+  install:
+    - pip install -r requirements.txt
+  install-dev:
+    - pip install -r requirements-dev.txt
+  pre-commit:
+    - pre-commit install
