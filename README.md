@@ -64,6 +64,30 @@ rav migrate
 rav server
 ```
 
+## Deployment
+
+### Render
+
+For Render, this repository includes `render.yaml` and `Procfile`.
+
+1. Connect this repo to Render
+2. Set the environment variables:
+   - `DJANGO_SECRET_KEY`
+   - `DJANGO_DEBUG=False`
+   - `DJANGO_ALLOWED_HOSTS=<your-domain>`
+   - `DATABASE_URL` (Render Postgres URL or Neon connection string if using Neon)
+   - `USE_CLOUDINARY=True` if using Cloudinary
+   - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+
+   If you use Neon, set `DATABASE_URL` to the full Neon Postgres URL and include `sslmode=require` if required by your Neon connection string.
+
+3. Render will build with `pip install -r requirements.txt`
+4. The app starts using `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`
+
+### Vercel front-end hosting
+
+This repo is backend-only. When you add a frontend repo, you can deploy it separately on Vercel and point the frontend API calls to the Render backend.
+
 ## API Endpoints
 
 - `GET /api/posts/`

@@ -73,7 +73,30 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-# For production, swap to Postgres, e.g. via dj-database-url + DATABASE_URL env var.
+
+if os.environ.get("DATABASE_URL"):
+    from urllib.parse import parse_qsl, urlparse
+
+    url = urlparse(os.environ["DATABASE_URL"])
+    query_params = dict(parse_qsl(url.query))
+
+    if url.scheme in {"postgres", "postgresql"}:
+        db_config = {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": url.path[1:],
+            "USER": url.username,
+            "PASSWORD": url.password,
+            "HOST": url.hostname,
+            "PORT": url.port or 5432,
+        }
+        if query_params:
+            db_config["OPTIONS"] = query_params
+        DATABASES["default"] = db_config
+    elif url.scheme == "sqlite":
+        DATABASES["default"] = {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / url.path.lstrip("/"),
+        }
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
