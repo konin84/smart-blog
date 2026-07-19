@@ -78,6 +78,10 @@ For Render, this repository includes `render.yaml` and `Procfile`.
    - `DATABASE_URL` (Render Postgres URL or Neon connection string if using Neon)
    - `USE_CLOUDINARY=True` if using Cloudinary
    - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+   - `EMAIL_BACKEND` (for production, for example `anymail.backends.mailgun.EmailBackend` or `anymail.backends.resend.EmailBackend`)
+   - `DEFAULT_FROM_EMAIL`
+   - `MAILGUN_API_KEY`, `MAILGUN_SENDER_DOMAIN`
+   - `RESEND_API_KEY`
 
    If you use Neon, set `DATABASE_URL` to the full Neon Postgres URL and include `sslmode=require` if required by your Neon connection string.
 

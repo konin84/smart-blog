@@ -1,0 +1,10 @@
+Hello {{ username }},
+
+Welcome to Smart Blog! Your new account has been created successfully.
+
+You can now log in and start writing posts, manage your profile, and explore the blog.
+
+If you need help, contact us at {{ support_email }}.
+
+Best regards,
+The Smart Blog Team

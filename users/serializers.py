@@ -1,4 +1,9 @@
+import os
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from rest_framework import serializers
 
 from .models import UserProfile
@@ -40,4 +45,24 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()
+        self.send_welcome_email(user)
         return user
+
+    def send_welcome_email(self, user):
+        subject = "Welcome to Smart Blog"
+        context = {
+            "username": user.username,
+            "site_name": "Smart Blog",
+            "support_email": settings.DEFAULT_FROM_EMAIL,
+        }
+        text_body = render_to_string("emails/welcome.txt", context)
+        html_body = render_to_string("emails/welcome.html", context)
+
+        email = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[user.email],
+        )
+        email.attach_alternative(html_body, "text/html")
+        email.send()

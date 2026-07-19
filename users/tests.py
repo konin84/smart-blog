@@ -1,5 +1,6 @@
+from django.core import mail
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework import status
@@ -27,6 +28,25 @@ class UserRegistrationTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["username"], "newuser")
         self.assertEqual(response.data["email"], "new@example.com")
+
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_register_user_sends_welcome_email(self):
+        payload = {
+            "username": "mailuser",
+            "email": "mailuser@example.com",
+            "password": "strongpassword123",
+            "password_confirm": "strongpassword123",
+        }
+
+        response = self.client.post(self.url, payload, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("Welcome to Smart Blog", mail.outbox[0].subject)
+        self.assertEqual(mail.outbox[0].to, ["mailuser@example.com"])
+        self.assertTrue(mail.outbox[0].alternatives)
+        self.assertEqual(mail.outbox[0].alternatives[0][1], "text/html")
+        self.assertIn("mailuser", mail.outbox[0].alternatives[0][0])
 
 
 class UserProfileTests(TestCase):
